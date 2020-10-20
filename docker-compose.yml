@@ -1,0 +1,29 @@
+version: '2'
+
+services:
+  drone-server:
+    image: drone/drone:0.6
+    ports:
+      - 8001:8000
+    volumes:
+      - ./:/var/lib/drone/
+    restart: always
+    environment:
+      - DRONE_OPEN=true
+      - DRONE_GITHUB=true
+      - DRONE_GITHUB_CLIENT=AQUI_VAI_O_APP_ID
+      - DRONE_GITHUB_SECRET=AQUI_VAI_O_APP_SECRET
+      - DRONE_SECRET=nashaijhsaihsaiua
+      - DRONE_ADMIN=eminetto
+      - DRONE_GITHUB_SCOPE=repo,repo:status,user:email,read:org
+      - DRONE_GITHUB_MERGE_REF=true
+      - DRONE_GITHUB_SKIP_VERIFY=true
+  drone-agent:
+    image: drone/drone:0.6
+    command: agent
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - DRONE_SERVER=ws://ci.seu_server.com:8001/ws/broker
+      - DRONE_SECRET=nashaijhsaihsaiua
